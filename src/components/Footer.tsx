@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { COMPANY_INFO } from '../data/capabilitiesData';
 import { Cpu, FileText, MapPin, Mail, Globe, ArrowUpRight } from 'lucide-react';
 
@@ -16,14 +17,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenRfq, onOpenPdf }) => {
           
           {/* Brand & Corporate Overview */}
           <div className="md:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-9 h-9 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 group-hover:scale-105 transition-transform">
                 <Cpu className="w-5 h-5" />
               </div>
-              <span className="text-base font-bold text-white tracking-tight">
+              <span className="text-base font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors">
                 MADTRONIX SYSTEMS
               </span>
-            </div>
+            </Link>
 
             <p className="text-slate-300 text-sm font-medium leading-relaxed max-w-sm">
               {COMPANY_INFO.name}
@@ -61,46 +62,66 @@ export const Footer: React.FC<FooterProps> = ({ onOpenRfq, onOpenPdf }) => {
           {/* Navigation Mirrors */}
           <div className="md:col-span-3 space-y-3">
             <div className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
-              Engineering Disciplines
+              Engineering Pages
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="#capabilities" className="hover:text-blue-300 transition-colors">Multilayer Controlled-Impedance PCB</a>
+                <Link to="/capabilities" className="hover:text-cyan-300 transition-colors">
+                  Core Capabilities & Stackups
+                </Link>
               </li>
               <li>
-                <a href="#disciplines" className="hover:text-blue-300 transition-colors">Embedded Firmware & Bare-Metal Drivers</a>
+                <Link to="/capabilities" className="hover:text-cyan-300 transition-colors">
+                  Specialized Disciplines (RF & FPGA)
+                </Link>
               </li>
               <li>
-                <a href="#disciplines" className="hover:text-blue-300 transition-colors">High-Speed FPGA DSP & VHDL Pipelines</a>
+                <Link to="/lifecycle" className="hover:text-cyan-300 transition-colors">
+                  Development Lifecycle & DFM
+                </Link>
               </li>
               <li>
-                <a href="#disciplines" className="hover:text-blue-300 transition-colors">Sub-6 GHz RF & Microwave Routing</a>
+                <Link to="/laboratory" className="hover:text-cyan-300 transition-colors">
+                  Laboratory Testing & SMT Standards
+                </Link>
               </li>
               <li>
-                <a href="#laboratory" className="hover:text-blue-300 transition-colors">In-House Laboratory Testing & Verification</a>
+                <Link to="/laboratory" className="hover:text-cyan-300 transition-colors">
+                  Defense & Aerospace Engineering
+                </Link>
               </li>
             </ul>
           </div>
 
           <div className="md:col-span-2 space-y-3">
             <div className="text-xs font-mono uppercase tracking-wider text-white font-semibold">
-              Engagement
+              Sectors & Models
             </div>
             <ul className="space-y-2">
               <li>
-                <a href="#engagement" className="hover:text-blue-300 transition-colors">Turnkey Product NPI</a>
+                <Link to="/industries" className="hover:text-cyan-300 transition-colors">
+                  Industries Served
+                </Link>
               </li>
               <li>
-                <a href="#engagement" className="hover:text-blue-300 transition-colors">On-Demand R&D Burst</a>
+                <Link to="/engagement" className="hover:text-cyan-300 transition-colors">
+                  Turnkey Product NPI
+                </Link>
               </li>
               <li>
-                <a href="#engagement" className="hover:text-blue-300 transition-colors">Design Optimization</a>
+                <Link to="/engagement" className="hover:text-cyan-300 transition-colors">
+                  On-Demand R&D Burst
+                </Link>
               </li>
               <li>
-                <a href="#lifecycle" className="hover:text-blue-300 transition-colors">Development Lifecycle</a>
+                <Link to="/engagement" className="hover:text-cyan-300 transition-colors">
+                  Design Optimization
+                </Link>
               </li>
               <li>
-                <a href="#industries" className="hover:text-blue-300 transition-colors">Defense & Industrial IoT</a>
+                <Link to="/deck" className="hover:text-cyan-300 transition-colors">
+                  Full Capabilities Deck (11 Slides)
+                </Link>
               </li>
             </ul>
           </div>
@@ -111,13 +132,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenRfq, onOpenPdf }) => {
               Documentation
             </div>
             <div className="space-y-2.5">
-              <button
-                onClick={onOpenPdf}
+              <Link
+                to="/deck"
                 className="flex items-center gap-1.5 text-xs text-blue-300 hover:text-white font-medium transition-colors"
               >
                 <FileText className="w-3.5 h-3.5 text-blue-400" />
-                <span>Capabilities PDF Deck</span>
-              </button>
+                <span>Capabilities Deck</span>
+              </Link>
 
               <button
                 onClick={onOpenRfq}

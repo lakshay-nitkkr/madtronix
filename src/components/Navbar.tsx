@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { COMPANY_INFO } from '../data/capabilitiesData';
 import { Cpu, FileText, Menu, X, ArrowUpRight } from 'lucide-react';
 
@@ -10,17 +11,31 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenRfq, onOpenPdf }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const navItemClass = ({ isActive }: { isActive: boolean }) =>
+    `text-sm font-medium transition-colors whitespace-nowrap shrink-0 hover:text-blue-400 py-1 ${
+      isActive
+        ? 'text-cyan-400 font-semibold border-b-2 border-cyan-400'
+        : 'text-slate-300'
+    }`;
+
+  const mobileNavItemClass = ({ isActive }: { isActive: boolean }) =>
+    `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+      isActive
+        ? 'bg-blue-900/60 text-cyan-300 font-semibold'
+        : 'text-slate-300 hover:bg-blue-950/60 hover:text-blue-300'
+    }`;
+
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#070D18]/90 backdrop-blur-md border-b border-blue-900/30">
+    <header className="sticky top-0 z-40 w-full bg-[#070D18]/95 backdrop-blur-md border-b border-blue-900/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-8 h-20">
           
-          {/* Zone 1: Brand Wordmark (Single text element with clean glyph) */}
-          <a 
-            href="#" 
+          {/* Zone 1: Single text element wordmark */}
+          <Link 
+            to="/" 
             className="flex items-center gap-3 whitespace-nowrap shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md"
           >
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 p-0.5 shadow-md shadow-blue-900/30">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 p-0.5 shadow-md shadow-blue-900/40">
               <div className="w-full h-full bg-[#091224] rounded-[6px] flex items-center justify-center">
                 <Cpu className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform duration-200" />
               </div>
@@ -33,58 +48,41 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRfq, onOpenPdf }) => {
                 Hardware Engineering
               </span>
             </div>
-          </a>
+          </Link>
 
-          {/* Zone 2: 5 Clean Single-Line Nav Links */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-300">
-            <a 
-              href="#capabilities" 
-              className="hover:text-blue-400 transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-8 decoration-blue-500/50"
-            >
+          {/* Zone 2: 5–6 Concise Single-Line Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
+            <NavLink to="/capabilities" className={navItemClass}>
               Capabilities
-            </a>
-            <a 
-              href="#disciplines" 
-              className="hover:text-blue-400 transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-8 decoration-blue-500/50"
-            >
-              Disciplines
-            </a>
-            <a 
-              href="#lifecycle" 
-              className="hover:text-blue-400 transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-8 decoration-blue-500/50"
-            >
+            </NavLink>
+            <NavLink to="/lifecycle" className={navItemClass}>
               Lifecycle
-            </a>
-            <a 
-              href="#laboratory" 
-              className="hover:text-blue-400 transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-8 decoration-blue-500/50"
-            >
-              Testing & Standards
-            </a>
-            <a 
-              href="#industries" 
-              className="hover:text-blue-400 transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-8 decoration-blue-500/50"
-            >
+            </NavLink>
+            <NavLink to="/laboratory" className={navItemClass}>
+              Laboratory & Testing
+            </NavLink>
+            <NavLink to="/industries" className={navItemClass}>
               Industries
-            </a>
-            <a 
-              href="#engagement" 
-              className="hover:text-blue-400 transition-colors whitespace-nowrap shrink-0 hover:underline underline-offset-8 decoration-blue-500/50"
-            >
+            </NavLink>
+            <NavLink to="/engagement" className={navItemClass}>
               Engagement
-            </a>
+            </NavLink>
+            <NavLink to="/deck" className={navItemClass}>
+              PDF Deck
+            </NavLink>
           </nav>
 
-          {/* Zone 3: 1 Primary Action + PDF Viewer Trigger */}
+          {/* Zone 3: 1 Primary Action + Quick PDF Action */}
           <div className="hidden sm:flex items-center gap-3 shrink-0">
             <button
               onClick={onOpenPdf}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-blue-300 hover:text-white bg-blue-950/50 hover:bg-blue-900/50 border border-blue-800/40 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
-              title="View original Capabilities PDF"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-blue-300 hover:text-white bg-blue-950/50 hover:bg-blue-900/50 border border-blue-800/40 rounded-lg transition-colors whitespace-nowrap shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
+              title="Quick preview original PDF"
             >
               <FileText className="w-3.5 h-3.5 text-blue-400" />
-              <span>Capabilities PDF</span>
+              <span>Preview PDF</span>
             </button>
+
             <button
               onClick={onOpenRfq}
               className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors shadow-lg shadow-blue-600/20 whitespace-nowrap shrink-0 focus-visible:ring-2 focus-visible:ring-blue-400"
@@ -116,51 +114,60 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRfq, onOpenPdf }) => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#0A1324] border-b border-blue-900/40 px-4 pt-3 pb-6 space-y-3">
-          <div className="flex flex-col space-y-2 text-sm font-medium text-slate-300">
-            <a 
-              href="#capabilities" 
+        <div className="lg:hidden bg-[#0A1324] border-b border-blue-900/50 px-4 pt-3 pb-6 space-y-3">
+          <div className="flex flex-col space-y-1.5 text-sm font-medium">
+            <NavLink 
+              to="/" 
+              end
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md hover:bg-blue-950/60 hover:text-blue-300"
+              className={mobileNavItemClass}
             >
-              Capabilities
-            </a>
-            <a 
-              href="#disciplines" 
+              Home Overview
+            </NavLink>
+            <NavLink 
+              to="/capabilities" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md hover:bg-blue-950/60 hover:text-blue-300"
+              className={mobileNavItemClass}
             >
-              Disciplines
-            </a>
-            <a 
-              href="#lifecycle" 
+              Engineering Capabilities
+            </NavLink>
+            <NavLink 
+              to="/lifecycle" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md hover:bg-blue-950/60 hover:text-blue-300"
+              className={mobileNavItemClass}
             >
               Development Lifecycle
-            </a>
-            <a 
-              href="#laboratory" 
+            </NavLink>
+            <NavLink 
+              to="/laboratory" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md hover:bg-blue-950/60 hover:text-blue-300"
+              className={mobileNavItemClass}
             >
-              Laboratory & Quality Standards
-            </a>
-            <a 
-              href="#industries" 
+              Laboratory & Testing
+            </NavLink>
+            <NavLink 
+              to="/industries" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md hover:bg-blue-950/60 hover:text-blue-300"
+              className={mobileNavItemClass}
             >
               Industries Served
-            </a>
-            <a 
-              href="#engagement" 
+            </NavLink>
+            <NavLink 
+              to="/engagement" 
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md hover:bg-blue-950/60 hover:text-blue-300"
+              className={mobileNavItemClass}
             >
-              Engagement Models
-            </a>
+              Commercial Engagement
+            </NavLink>
+            <NavLink 
+              to="/deck" 
+              onClick={() => setMobileMenuOpen(false)}
+              className={mobileNavItemClass}
+            >
+              Capabilities PDF Deck
+            </NavLink>
           </div>
+
           <div className="pt-3 border-t border-blue-900/30 flex flex-col gap-2">
             <button
               onClick={() => {
@@ -170,8 +177,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenRfq, onOpenPdf }) => {
               className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium text-blue-300 bg-blue-950/60 border border-blue-800/40 rounded-lg"
             >
               <FileText className="w-4 h-4 text-blue-400" />
-              <span>View Original Capabilities PDF</span>
+              <span>Quick Preview PDF</span>
             </button>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);

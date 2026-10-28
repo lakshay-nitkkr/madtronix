@@ -1,6 +1,5 @@
 import React from 'react';
 import { CORE_CAPABILITIES } from '../data/capabilitiesData';
-import { PcbStackupViewer } from './PcbStackupViewer';
 import { Layers, Terminal, Zap, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface CoreCapabilitiesProps {
@@ -75,11 +74,6 @@ export const CoreCapabilities: React.FC<CoreCapabilitiesProps> = ({ onOpenRfq })
               </div>
             );
           })}
-        </div>
-
-        {/* Embedded Interactive Stackup Synthesizer Component */}
-        <div className="mt-8">
-          <PcbStackupViewer />
         </div>
 
       </div>
