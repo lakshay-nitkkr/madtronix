@@ -82,41 +82,11 @@ async function startServer() {
       console.log(`Query: ${newInquiry.query}`);
       console.log('==================================================');
 
-      // Optional real email dispatch via Resend API or Webhook if configured in environment
-      const resendApiKey = process.env.RESEND_API_KEY;
-      const webhookUrl = process.env.NOTIFICATION_WEBHOOK_URL;
-      const targetInbox = process.env.NOTIFICATION_EMAIL || 'contact@madtronixsystems.com';
-
-      if (resendApiKey) {
-        fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${resendApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: process.env.RESEND_FROM_EMAIL || 'Madtronix Inquiries <onboarding@resend.dev>',
-            to: [targetInbox],
-            reply_to: newInquiry.email,
-            subject: `[New Inquiry ${referenceId}] ${newInquiry.requirement.toUpperCase()} - ${newInquiry.fullName}`,
-            text: `MADTRONIX SYSTEMS - NEW CONSULTATION QUERY\n\nReference ID: ${referenceId}\nFull Name: ${newInquiry.fullName}\nEmail: ${newInquiry.email}\nMobile: ${newInquiry.mobile}\nCompany: ${newInquiry.companyName || 'N/A'}\nWebsite: ${newInquiry.website || 'N/A'}\nRequirement: ${newInquiry.requirement}\n\nQuery:\n${newInquiry.query}\n\nSubmitted at: ${newInquiry.submittedAt}`,
-          }),
-        }).catch((err) => console.error('[Email Dispatch Error]', err.message));
-      }
-
-      if (webhookUrl) {
-        fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newInquiry),
-        }).catch((err) => console.error('[Webhook Dispatch Error]', err.message));
-      }
-
       return res.status(200).json({
         success: true,
         referenceId,
-        recipient: targetInbox,
-        message: `Your query has been directly submitted to ${targetInbox}.`,
+        recipient: 'contact@madtronixsystems.com',
+        message: 'Your query has been directly submitted to contact@madtronixsystems.com.',
         data: newInquiry,
       });
     } catch (err: any) {
