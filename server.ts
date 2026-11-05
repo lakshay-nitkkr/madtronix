@@ -11,7 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const isProduction = process.env.NODE_ENV === 'production';
-const PORT = Number(process.env.PORT) || 3000;
+// Dev server must run on port 3000 as required by AI Studio environment
+const PORT = 3000;
 const DATA_DIR = path.resolve(__dirname, 'data');
 const INQUIRIES_FILE = path.join(DATA_DIR, 'inquiries.json');
 
@@ -28,6 +29,25 @@ async function startServer() {
 
   // Parse JSON bodies
   app.use(express.json());
+
+  // Static SEO routes
+  app.get('/sitemap.xml', (req, res) => {
+    const sitemapPath = path.resolve(__dirname, 'public', 'sitemap.xml');
+    if (fs.existsSync(sitemapPath)) {
+      res.setHeader('Content-Type', 'application/xml');
+      return res.sendFile(sitemapPath);
+    }
+    res.status(404).send('Sitemap not found');
+  });
+
+  app.get('/robots.txt', (req, res) => {
+    const robotsPath = path.resolve(__dirname, 'public', 'robots.txt');
+    if (fs.existsSync(robotsPath)) {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      return res.sendFile(robotsPath);
+    }
+    res.status(404).send('Robots.txt not found');
+  });
 
   // Direct consultation submission endpoint
   app.post('/api/consultation', (req, res) => {
@@ -112,7 +132,7 @@ async function startServer() {
   // Vite middleware in dev or static files in production
   if (!isProduction) {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: 'spa',
     });
     app.use(vite.middlewares);

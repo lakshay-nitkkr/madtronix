@@ -91,80 +91,57 @@ export const ConsultationForm: React.FC<ConsultationFormProps> = ({
     setServerError(null);
 
     const refId = `MTX-${Date.now().toString().slice(-6)}`;
-
-    // Try 1: Node.js Express server endpoint
     let submittedSuccessfully = false;
 
+    // 1. Direct browser-to-email service (FormSubmit - bypasses server ModSecurity completely)
     try {
-      const res = await fetch('/api/consultation', {
+      const directPayload = {
+        _subject: `[Consultation ${refId}] ${formData.requirement.toUpperCase()} - ${formData.fullName}`,
+        name: formData.fullName,
+        email: formData.email,
+        mobile: formData.mobile,
+        company: formData.companyName || 'N/A',
+        website: formData.website || 'N/A',
+        requirement: formData.requirement,
+        message: formData.query,
+        reference_id: refId,
+        _template: 'table',
+        _captcha: 'false',
+      };
+
+      const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${COMPANY_INFO.email}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(directPayload),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success) {
-          setReferenceId(data.referenceId || refId);
-          submittedSuccessfully = true;
-        }
+      if (formSubmitRes.ok) {
+        submittedSuccessfully = true;
       }
-    } catch {
-      // Node server not available, fall through
+    } catch (e) {
+      console.warn('FormSubmit network notice:', e);
     }
 
-    // Try 2: If Node server not available, try static PHP mailer (/contact.php)
+    // 2. Also notify local Node dev server if running in local environment
     if (!submittedSuccessfully) {
       try {
-        const phpRes = await fetch('/contact.php', {
+        const res = await fetch('/api/consultation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
         });
 
-        if (phpRes.ok) {
-          const phpData = await phpRes.json();
-          if (phpData.success) {
-            setReferenceId(phpData.referenceId || refId);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
             submittedSuccessfully = true;
           }
         }
       } catch {
-        // PHP mailer not available, fall through
-      }
-    }
-
-    // Try 3: Direct browser-to-email service (FormSubmit.co - requires zero server/Node)
-    if (!submittedSuccessfully) {
-      try {
-        const directPayload = {
-          _subject: `[New Inquiry ${refId}] ${formData.requirement.toUpperCase()} - ${formData.fullName}`,
-          name: formData.fullName,
-          email: formData.email,
-          mobile: formData.mobile,
-          company: formData.companyName || 'N/A',
-          website: formData.website || 'N/A',
-          requirement: formData.requirement,
-          message: formData.query,
-          reference_id: refId,
-          _template: 'table',
-        };
-
-        const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${COMPANY_INFO.email}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(directPayload),
-        });
-
-        if (formSubmitRes.ok) {
-          setReferenceId(refId);
-          submittedSuccessfully = true;
-        }
-      } catch {
-        // Fallback to local storage persistence
+        // Static host without Node
       }
     }
 

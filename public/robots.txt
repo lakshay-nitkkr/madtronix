@@ -1,0 +1,6 @@
+# Robots.txt for Madtronix Systems Private Limited
+User-agent: *
+Allow: /
+
+# Sitemap Index
+Sitemap: https://madtronixsystems.com/sitemap.xml

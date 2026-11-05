@@ -140,6 +140,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenRfq, onOpenPdf }) => {
                 <span>Capabilities Deck</span>
               </Link>
 
+              <a
+                href="/sitemap.xml"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 text-xs text-blue-300 hover:text-white font-medium transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5 text-blue-400" />
+                <span>XML Sitemap</span>
+              </a>
+
               <button
                 onClick={onOpenRfq}
                 className="w-full py-2 px-3 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
